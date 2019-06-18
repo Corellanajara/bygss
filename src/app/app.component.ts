@@ -20,19 +20,39 @@ export class AppComponent implements OnInit {
   // define your footer links
   private footer = {
       left_part: `<strong>
-        Copyright &copy; 2017
-        <a href="http://www.weberantoine.fr" >WEBER Antoine</a>.
+        Copyright &copy; 2019
+        Protección y amparo
     	</strong>
-      Open-source Sharing`,
-      right_part: 'Bootstrapping Ngx-Admin-LTE',
+      todos los derechos reservados`,
+      right_part: 'Cristopher Orellana',
     };
   // define here your own links menu structure
   private mylinks: any = [
     {
-      'header': 'NAVIGATION TITLE'
+      'header': 'Menu navegación'
     },
     {
       'title': 'Home',
+      'icon': 'dashboard',
+      'link': ['/']
+    },
+    {
+      'title': 'Estudio Judicial',
+      'icon': 'book',
+      'link': ['/estudio-judicial']
+    }/*,
+    {
+      'title': 'otro',
+      'icon': 'dashboard',
+      'link': ['/']
+    },
+    {
+      'title': 'otro',
+      'icon': 'dashboard',
+      'link': ['/']
+    },
+    {
+      'title': '',
       'icon': 'dashboard',
       'link': ['/']
     },
@@ -77,6 +97,7 @@ export class AppComponent implements OnInit {
         }
       ]
     },
+
     // external widget
     {
       class: MenuWidgetComponent,
@@ -84,11 +105,12 @@ export class AppComponent implements OnInit {
         label: 'test component'
       }
     }
+    */
   ];
   // define here your logo
   private logo = {
-    html_mini: 'NG<b>X</b>',
-    html_lg: '<b>NGX</b>Admin-LTE',
+    html_mini: 'P<b>Y</b>A',
+    html_lg: 'Protección <b>&</b> Amparo',
   };
 
   constructor(
@@ -112,9 +134,9 @@ export class AppComponent implements OnInit {
     // defining some test users
     const user1 = new User( {
         avatarUrl: 'assets/img/user2-160x160.jpg',
-        email: 'weber.antoine.pro@gmail.com',
-        firstname: 'WEBER',
-        lastname: 'Antoine'
+        email: 'corellanajara@proteccionyamparo.cl',
+        firstname: 'Cristopher',
+        lastname: 'Orellana'
     });
     const user2 = new User( {
         avatarUrl: 'assets/img/user2-160x160.jpg',
@@ -125,14 +147,14 @@ export class AppComponent implements OnInit {
     // sending a test message
     this.msgServ.addMessage( new Message( {
         author: user2,
-        content: 'le contenu d\'un message d\'une importance extreme',
+        content: 'Mensaje ',
         destination: user1,
-        title: 'un message super important'
+        title: 'Ojo hay algo que ver'
     }) );
     // sending a test notif
     this.notifServ.addNotification( new Notification( {
         class: 'fa fa-users text-aqua',
-        content: '5 new members joined today',
+        content: 'hay una notificacion',
         link: '/page/2'
     }) );
 

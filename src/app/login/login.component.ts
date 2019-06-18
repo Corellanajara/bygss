@@ -23,18 +23,13 @@ export class LoginComponent implements OnInit {
 
   public login() {
 
-    // test les champs en js
-
-    // envoyer les champs a php
-
-    // si retour positif, log le user
     if ( 1 === 1 ) {
 
       const user1 = new User( {
           avatarUrl: 'assets/img/user2-160x160.jpg',
-          email: 'weber.antoine@outlook.com',
-          firstname: 'WEBER',
-          lastname: 'Antoine'
+          email: 'corellanajara@proteccionyamparo.cl',
+          firstname: 'Cristopher',
+          lastname: 'Orellana'
       } );
 
       user1.connected = true;

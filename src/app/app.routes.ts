@@ -74,15 +74,69 @@ const routes: Routes = [
     path: 'login',
   },
   {
+    canActivate: [CanActivateGuard],
     children: [
       {
-        loadChildren: './register/register.module#RegisterModule',
-        path: ''
+        loadChildren: './estudio-judicial/estudio-judicial.module#EstudioJudicialModule',
+        path: 'estudio-judicial'
       }
     ],
-    component: LayoutRegisterComponent,
-    path: 'register',
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
+  },
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './estudio-sucursal/estudio-sucursal.module#EstudiosucursalModule',
+        path: 'estudio-sucursal/:id'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
+  },
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './sucursal-materia/sucursal-materia.module#SucursalMateriaModule',
+        path: 'sucursal-materia/:id/:id'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
   }
+
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
