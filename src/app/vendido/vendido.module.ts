@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SucursalMateriaComponent } from './sucursal-materia.component';
+import { VendidoComponent } from './vendido.component';
 //import { Component} from '@angular/core';
 
 const ROUTES: Routes = [
-    { path: '', component: SucursalMateriaComponent }
+    { path: '', component: VendidoComponent }
 ];
 
 @NgModule({
-    declarations: [SucursalMateriaComponent],
+    declarations: [VendidoComponent],
     imports: [CommonModule,RouterModule.forChild(ROUTES)]
 })
-export class SucursalMateriaModule {}
+export class VendidoModule {}

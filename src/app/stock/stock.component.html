@@ -1,0 +1,328 @@
+<!-- Modal hecho para funcionar con ng bootstrap-->
+<ng-template #contenidoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>One fine body&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<!--Modal para agregar producto y actualizar producto -->
+<div class="modal modal-xl fade" id="ModalAddProducto" tabindex="-1" role="dialog" aria-labelledby="ModalAddProducto" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Agregar a Pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Valida información del producto</h3>
+        <hr>
+        <form >
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Nombre:</label>
+                <input  type="form-control" name="Nombre" [(ngModel)]="productoSeleccionado.Nombre"  value={{productoSeleccionado.Nombre}} >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Codigo:</label>
+                <input  type="form-control" name="Codigo" [(ngModel)]="productoSeleccionado.Codigo"  value={{productoSeleccionado.Codigo}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Talla:</label>
+                <input type="form-control number"  name="Talla" [(ngModel)]="productoSeleccionado.Talla" [(ngModel)]="productoSeleccionado.Talla" value={{productoSeleccionado.Talla}}>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Proveedor:</label>
+                <input type="form-control"  name="Proveedor" [(ngModel)]="productoSeleccionado.Proveedor" value={{productoSeleccionado.Proveedor}}>
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Color :</label>
+                <input type="form-control "  name="Color" [(ngModel)]="productoSeleccionado.Color" value={{productoSeleccionado.Color}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Cantidad:</label>
+                <input type="form-control number"  name="Cantidad" [(ngModel)]="productoSeleccionado.Cantidad" value={{productoSeleccionado.Cantidad}}>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Costo:</label>
+                <input type="form-control number"  name="PrecioCosto" [(ngModel)]="productoSeleccionado.PrecioCosto" value={{productoSeleccionado.PrecioCosto}}>
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Venta:</label>
+                <input type="form-control number"  name="PrecioVenta" [(ngModel)]="productoSeleccionado.PrecioVenta" value={{productoSeleccionado.PrecioVenta}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Fecha Ingreso:</label>
+                <div class="col-md-9">
+                  <input class="form-control" placeholder="dd-mm-yyyy"
+                         name="dp" [(ngModel)]="productoSeleccionado.FechaIngreso" ngbDatepicker #d="ngbDatepicker">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i> </button>
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+        <hr>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  *ngIf="productoSeleccionado._id != '' " (click)="actualizarProducto()">Actualizar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"  *ngIf="productoSeleccionado._id ==  '' " (click)="addProducto()">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Para Añadir Venta-->
+<div class="modal modal-xl fade" id="ModalVentaProducto" tabindex="-1" role="dialog" aria-labelledby="ModalVentaProducto" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Agregar a Pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Valida información del producto</h3>
+        <hr>
+        <form [formGroup]="productoFormulario">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Nombre:</label>
+                <input  type="form-control" name="" formControlName="Nombre" >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Codigo:</label>
+                <input  type="form-control" name="" formControlName="Codigo" >
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Talla:</label>
+                <input type="form-control number"  name="" formControlName="Talla">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Proveedor:</label>
+                <input type="form-control"  name="" formControlName="Proveedor">
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Color :</label>
+                <input type="form-control number"  name="" formControlName="Color">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Cantidad:</label>
+                <input type="form-control number"  name="" formControlName="Cantidad">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Costo:</label>
+                <input type="form-control number"  name="" formControlName="PrecioCosto">
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Venta:</label>
+                <input type="form-control number"  name="" formControlName="PrecioVenta">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Fecha Pago:</label>
+                <input type="form-control number"  name="" formControlName="FechaPago">
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+        <hr>
+        <h3>Datos cliente</h3>
+        <form [formGroup]="personaFormulario">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Nombres:</label>
+                <input type="form-control" name="" formControlName="nombres" placeholder="Ej : Cristopher Marcelo" value="">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Apellido Paterno:</label>
+                <input type="form-control" name="" formControlName="apellido_p" placeholder="Ej : Orellana" value="">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Apellido Materno:</label>
+                <input type="form-control" name="" formControlName="apellido_m" placeholder="Ej : Jara" value="">
+              </div>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!personaFormulario.valid" (click)="addVenta()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal eliminar -->
+<div class="modal modal-xl fade" id="ModalEliminaProducto" tabindex="-1" role="dialog" aria-labelledby="ModalEliminaProducto" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Estas seguro que deseas eliminar este producto?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="eliminar()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" (click)="vaciarProductoActual()" class="btn btn-primary btn-block" data-toggle="modal" data-target="#ModalAddProducto">
+  Agregar nuevo producto
+</button>
+
+<br>
+
+<form>
+  <div class="form-group form-inline">
+      Filtro: <input class="form-control ml-2" type="text" [(ngModel)]="filtro" (change)="filtrar()" [ngModelOptions]="{standalone: true}"/>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+
+    <th>id</th>
+    <th scope="col" sortable="Nombre" (sort)="onSort($event)">Nombre</th>
+    <th scope="col" sortable="Codigo" (sort)="onSort($event)">Codigo</th>
+    <th scope="col" sortable="Proveedor" (sort)="onSort($event)">Proveedor</th>
+    <th scope="col" sortable="PrecioCosto" (sort)="onSort($event)">Precio Costo</th>
+    <th scope="col" sortable="PrecioVenta" (sort)="onSort($event)">Precio Venta</th>
+    <th scope="col" sortable="Talla" (sort)="onSort($event)">Talla</th>
+    <th>Acciones</th>
+
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let producto of Productos; index as i">
+    <th scope="row">{{ i + 1  }}</th>
+    <td>{{producto.Nombre}}</td>
+    <td>{{producto.Codigo}}</td>
+    <td>{{producto.Proveedor}}</td>
+    <td>{{producto.PrecioCosto}}</td>
+    <td>{{producto.PrecioVenta}}</td>
+    <td>{{producto.Talla}}</td>
+    <td>
+      <button type="button" (click)="productoActualizar(producto)" class="btn btn-info" data-toggle="modal" data-target="#ModalAddProducto">
+        ver
+      </button>
+      <button type="button" (click)="productoActual(producto)" class="btn btn-success" data-toggle="modal" data-target="#ModalVentaProducto">
+        Vender
+      </button>
+      <button type="button" class="btn btn-danger" (click)="productoActual(producto)" data-toggle="modal" data-target="#ModalEliminaProducto">
+        Eliminar
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<button class="btn btn-outline-primary mb-2 mr-2" (click)="openLg(contenidoModal)">Large modal</button>

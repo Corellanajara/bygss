@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   private footer = {
       left_part: `<strong>
         Copyright &copy; 2019
-        Protección y amparo
+        Bygss
     	</strong>
       todos los derechos reservados`,
       right_part: 'Cristopher Orellana',
@@ -37,9 +37,24 @@ export class AppComponent implements OnInit {
       'link': ['/']
     },
     {
-      'title': 'Estudio Judicial',
+      'title': 'Stock',
       'icon': 'book',
-      'link': ['/estudio-judicial']
+      'link': ['/stock']
+    },
+    {
+      'title': 'Pedido',
+      'icon': 'book',
+      'link': ['/pedido']
+    },
+    {
+      'title': 'Vendido',
+      'icon': 'book',
+      'link': ['/vendido']
+    },
+    {
+      'title': 'Agregar',
+      'icon': 'book',
+      'link': ['/agregar']
     }/*,
     {
       'title': 'otro',
@@ -109,8 +124,8 @@ export class AppComponent implements OnInit {
   ];
   // define here your logo
   private logo = {
-    html_mini: 'P<b>Y</b>A',
-    html_lg: 'Protección <b>&</b> Amparo',
+    html_mini: 'B<b>&</b>Y',
+    html_lg: 'BYGSS',
   };
 
   constructor(
@@ -139,7 +154,7 @@ export class AppComponent implements OnInit {
         lastname: 'Orellana'
     });
     const user2 = new User( {
-        avatarUrl: 'assets/img/user2-160x160.jpg',
+        //avatarUrl: 'assets/img/user2-160x160.jpg',
         email: 'EMAIL',
         firstname: 'FIRSTNAME',
         lastname: 'LASTNAME'

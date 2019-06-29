@@ -38,30 +38,6 @@ const routes: Routes = [
     }],
     path: '',
   },
-  //route with no boxed_style layout
-  {
-    canActivate: [CanActivateGuard],
-    children: [
-      {
-        canActivate: [CanActivateGuard],
-        loadChildren: './page-num/page-num.module#PageNumModule',
-        path: 'page/:id'
-      },
-    ],
-    component: LayoutAuthComponent,
-    data: [{
-      'skin': 'skin-black',
-      'boxed_style': false,
-      'display_tasks': false,
-      'header_components': [{
-        class: HeaderWidgetComponent,
-        data: {
-          label: 'test widget'
-        }
-      }]
-    }],
-    path: '',
-  },
   // not logged routes
   {
     children: [
@@ -77,8 +53,8 @@ const routes: Routes = [
     canActivate: [CanActivateGuard],
     children: [
       {
-        loadChildren: './estudio-judicial/estudio-judicial.module#EstudioJudicialModule',
-        path: 'estudio-judicial'
+        loadChildren: './stock/stock.module#StockModule',
+        path: 'stock'
       }
     ],
     component: LayoutAuthComponent,
@@ -98,7 +74,71 @@ const routes: Routes = [
     canActivate: [CanActivateGuard],
     children: [
       {
-        loadChildren: './estudio-sucursal/estudio-sucursal.module#EstudiosucursalModule',
+        loadChildren: './pedido/pedido.module#PedidoModule',
+        path: 'pedido'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
+  },
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './vendido/vendido.module#VendidoModule',
+        path: 'vendido'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
+  },
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './agregar/agregar.module#AgregarModule',
+        path: 'agregar'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'agregar'
+        }
+      }]
+    }],
+    path: '',
+  }
+  /*,
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './stock/estudio-sucursal/estudio-sucursal.module#EstudiosucursalModule',
         path: 'estudio-sucursal/:id'
       }
     ],
@@ -119,8 +159,29 @@ const routes: Routes = [
     canActivate: [CanActivateGuard],
     children: [
       {
-        loadChildren: './sucursal-materia/sucursal-materia.module#SucursalMateriaModule',
-        path: 'sucursal-materia/:id/:id'
+        loadChildren: './stock/estudio-causa/estudio-causa.module#EstudioCausaModule',
+        path: 'estudio-causa/:sucursal/:modulo'
+      }
+    ],
+    component: LayoutAuthComponent,
+    data: [{
+      'skin': 'skin-black',
+      'display_tasks': false,
+      'header_components': [{
+        class: HeaderWidgetComponent,
+        data: {
+          label: 'Widgetss'
+        }
+      }]
+    }],
+    path: '',
+  },
+  {
+    canActivate: [CanActivateGuard],
+    children: [
+      {
+        loadChildren: './stock/sucursal-materia/sucursal-materia.module#SucursalMateriaModule',
+        path: 'sucursal-materia/:sucursal/:modulo/:id'
       }
     ],
     component: LayoutAuthComponent,
@@ -136,7 +197,7 @@ const routes: Routes = [
     }],
     path: '',
   }
-
+*/
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);

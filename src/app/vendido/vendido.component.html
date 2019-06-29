@@ -1,0 +1,40 @@
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Nombre Persona</th>
+      <th>Nombre Producto</th>
+      <th>Codigo</th>
+      <th>Cantidad</th>
+      <th>PrecioVenta</th>
+      <th>Total</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let producto of Productos; index as i">
+      <td>{{i + 1}}</td>
+      <td>{{producto.Persona[0].nombres}} {{producto.Persona[0].apellido_p}}</td>
+      <td>{{producto.Nombre}}</td>
+      <td>{{producto.Codigo}}</td>
+      <td>{{producto.Cantidad}}</td>
+      <td>{{producto.PrecioVenta}}</td>
+      <td>{{producto.PrecioVenta * producto.Cantidad}}</td>
+      <td>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalVerproducto">
+          ver
+        </button>
+      </td>
+    </tr>
+    <tr style="background-color:pink">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{sumaTotales}}</td>
+    </tr>
+  </tbody>
+</table>
