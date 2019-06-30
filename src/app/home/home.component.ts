@@ -16,11 +16,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     private msgServ: MessagesService,
     private breadServ: BreadcrumbService
   ) {
+    let usuario = JSON.parse(sessionStorage.getItem('usuario'));
+    this.user_id = usuario._id;
     this.refrescarDataStock();
     this.refrescarDataVendido();
     this.refrescarDataPendiente();
     this.refrescarDataPedido();
   }
+  user_id : string;
   sumaVentasVendido = 0;
   sumaCostosVendido = 0;
   sumaTotalesVendido = 0;
@@ -55,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public refrescarDataPendiente(){
     let enPendiente = 4;
-    this.productoService.listarPorEstado(enPendiente).subscribe(productos=>{
+    this.productoService.listarPorEstado(enPendiente,this.user_id).subscribe(productos=>{
 
       for(let i = 0 ; i < productos.length;i++){
         this.sumaCostosPendiente += productos[i].PrecioCosto;
@@ -69,7 +72,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public refrescarDataVendido(){
     let enVendido = 3;
-    this.productoService.listarPorEstado(enVendido).subscribe(productos=>{
+
+    this.productoService.listarPorEstado(enVendido,this.user_id).subscribe(productos=>{
 
       for(let i = 0 ; i < productos.length;i++){
         this.sumaCostosVendido += productos[i].Cantidad * productos[i].PrecioCosto;
@@ -82,7 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public refrescarDataStock(){
     let enStock = 1;
-    this.productoService.listarPorEstado(enStock).subscribe(productos=>{
+    this.productoService.listarPorEstado(enStock,this.user_id).subscribe(productos=>{
 
       for(let i = 0 ; i < productos.length;i++){
         this.sumaCostosStock += productos[i].Cantidad * productos[i].PrecioCosto;
@@ -95,7 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public refrescarDataPedido(){
     let enPedido = 2;
-    this.productoService.listarPorEstado(enPedido).subscribe(productos=>{
+    this.productoService.listarPorEstado(enPedido,this.user_id).subscribe(productos=>{
 
       for(let i = 0 ; i < productos.length;i++){
         this.sumaCostosPedido += productos[i].Cantidad * productos[i].PrecioCosto;

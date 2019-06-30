@@ -1,14 +1,145 @@
+<!--Modal para agregar producto y actualizar producto -->
+<div class="modal modal-xl fade" id="ModalVerproducto" tabindex="-1" role="dialog" aria-labelledby="ModalVerproducto" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Agregar producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Valida información del producto</h3>
+        <hr>
+        <form >
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Nombre:</label>
+                <input  type="form-control" name="Nombre" [(ngModel)]="productoSeleccionado.Nombre"  value={{productoSeleccionado.Nombre}} >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Codigo:</label>
+                <input  type="form-control" name="Codigo" [(ngModel)]="productoSeleccionado.Codigo"  value={{productoSeleccionado.Codigo}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Talla:</label>
+                <input type="form-control number"  name="Talla" [(ngModel)]="productoSeleccionado.Talla" [(ngModel)]="productoSeleccionado.Talla" value={{productoSeleccionado.Talla}}>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Proveedor:</label>
+                <input type="form-control"  name="Proveedor" [(ngModel)]="productoSeleccionado.Proveedor" value={{productoSeleccionado.Proveedor}}>
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Color :</label>
+                <input type="form-control "  name="Color" [(ngModel)]="productoSeleccionado.Color" value={{productoSeleccionado.Color}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Cantidad:</label>
+                <input type="form-control number"  name="Cantidad" [(ngModel)]="productoSeleccionado.Cantidad" value={{productoSeleccionado.Cantidad}}>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Costo:</label>
+                <input type="form-control number"  name="PrecioCosto" [(ngModel)]="productoSeleccionado.PrecioCosto" value={{productoSeleccionado.PrecioCosto}}>
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Precio Venta:</label>
+                <input type="form-control number"  name="PrecioVenta" [(ngModel)]="productoSeleccionado.PrecioVenta" value={{productoSeleccionado.PrecioVenta}}>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1" >Fecha Ingreso:</label>
+                <div class="col-md-9">
+                  <input type="form-control"
+                          [(ngModel)]="productoSeleccionado.FechaIngreso"  name="FechaIngreso" value={{productoSeleccionado.FechaIngreso}}>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+        <hr>
+        <h3>Datos cliente</h3>
+        <form [formGroup]="personaFormulario">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Nombres:</label>
+                <input type="form-control" name="" [(ngModel)]="personaSeleccionada.nombres" value="{{personaSeleccionada.nombres}}" formControlName="nombres" placeholder="Ej : Cristopher Marcelo" value="">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Apellido Paterno:</label>
+                <input type="form-control" name="" formControlName="apellido_p" [(ngModel)]="personaSeleccionada.apellido_p" value="{{personaSeleccionada.apellido_p}}" placeholder="Ej : Orellana" value="">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="sel1">Apellido Materno:</label>
+                <input type="form-control" name="" formControlName="apellido_m" [(ngModel)]="personaSeleccionada.apellido_m" value="{{personaSeleccionada.apellido_m}}" placeholder="Ej : Jara" value="">
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ok</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <table class="table table-bordered">
   <thead>
     <tr>
+
       <th>id</th>
-      <th>Nombre Persona</th>
-      <th>Nombre Producto</th>
-      <th>Codigo</th>
-      <th>Cantidad</th>
-      <th>PrecioVenta</th>
-      <th>Total</th>
+      <th scope="col" sortable="NombrePersona" (sort)="onSort($event)">Nombre Persona</th>
+      <th scope="col" sortable="NombreProducto" (sort)="onSort($event)">Nombre Producto</th>
+      <th scope="col" sortable="Codigo" (sort)="onSort($event)">Codigo</th>
+      <th scope="col" sortable="Cantidad" (sort)="onSort($event)">Cantidad</th>
+      <th scope="col" sortable="PrecioVenta" (sort)="onSort($event)">Precio Venta</th>
+      <th scope="col" sortable="Total" (sort)="onSort($event)">Total</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -22,7 +153,7 @@
       <td>{{producto.PrecioVenta}}</td>
       <td>{{producto.PrecioVenta * producto.Cantidad}}</td>
       <td>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ModalVerproducto">
+        <button type="button" (click)="productoActualizar(producto)" class="btn btn-info" data-toggle="modal" data-target="#ModalVerproducto">
           ver
         </button>
       </td>

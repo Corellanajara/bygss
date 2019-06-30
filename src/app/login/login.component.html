@@ -1,9 +1,11 @@
 <p class="login-box-msg">Inicia tu sesión</p>
+<p class="login-box-msg" style="color:red" >{{mensaje}}</p>
 
-<form>
-
+<form >
+  <div style="text-align:center" class="loader" *ngIf="iniciando">cargando...</div>
   <div class="form-group has-feedback">
     <input type="email" class="form-control" placeholder="Email" required minlength="8" name="eml" [(ngModel)]="email" #eml="ngModel">
+
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     <div *ngIf="eml.errors && (eml.dirty || eml.touched)" class="alert alert-danger">
         <div [hidden]="!eml.errors.required">
@@ -39,7 +41,8 @@
     </div>
     <!-- /.col -->
     <div class="col-xs-4">
-      <button type="submit" class="btn btn-primary btn-block btn-flat" (click)="login()" >Iniciar</button>
+      <button type="submit" class="btn btn-primary btn-block btn-flat" disabled  *ngIf="password == '' && email == '' ">Iniciar</button>
+      <button type="submit" class="btn btn-primary btn-block btn-flat" (click)="login()"  *ngIf="password != '' && email != '' "  >Iniciar</button>
     </div>
     <!-- /.col -->
   </div>

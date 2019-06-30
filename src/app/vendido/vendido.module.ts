@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { VendidoComponent } from './vendido.component';
+import { VendidoComponent , NgbdSortableHeader } from './vendido.component';
+import { ReactiveFormsModule ,FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //import { Component} from '@angular/core';
 
 const ROUTES: Routes = [
@@ -9,7 +11,9 @@ const ROUTES: Routes = [
 ];
 
 @NgModule({
-    declarations: [VendidoComponent],
-    imports: [CommonModule,RouterModule.forChild(ROUTES)]
+    declarations: [VendidoComponent,NgbdSortableHeader],
+    exports: [VendidoComponent],
+    bootstrap: [VendidoComponent],
+    imports: [NgbModule,FormsModule,ReactiveFormsModule,CommonModule,RouterModule.forChild(ROUTES)]
 })
 export class VendidoModule {}

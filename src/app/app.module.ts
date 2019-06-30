@@ -5,7 +5,9 @@ import { HttpModule } from '@angular/http';
 
 // components
 import { AppComponent } from './app.component';
-
+//services
+import { dbUserService } from './_service/user.service';
+import { ProductoService } from './_service/product.service';
 // modules
 import { NgxAdminLteModule } from 'ngx-admin-lte';
 
@@ -18,7 +20,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { routing } from './app.routes';
 import { MenuWidgetComponent } from './widgets/menu-widget/menu-widget.component';
 import { HeaderWidgetComponent } from './widgets/header-widget/header-widget.component';
-//import { EstudioJuridicoComponent } from './estudio-juridico/estudio-juridico.component';
 
 @NgModule({
   declarations: [
@@ -31,13 +32,13 @@ import { HeaderWidgetComponent } from './widgets/header-widget/header-widget.com
   imports: [
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule,    
+    ReactiveFormsModule,
     NgbModule.forRoot(),
     HttpModule,
     NgxAdminLteModule,
     routing
   ],
-  providers: [],
+  providers: [dbUserService,ProductoService],
   bootstrap: [
     AppComponent
   ],

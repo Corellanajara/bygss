@@ -35,11 +35,11 @@ export class NgbdSortableHeader {
 
 @Component({
   selector: 'app-stock',
-  templateUrl: './pedido.component.html',
-  styleUrls: ['./pedido.component.css'],
+  templateUrl: './stock.component.html',
+  styleUrls: ['./stock.component.css'],
   providers: [ ProductoService  ]
 })
-export class PedidoComponent implements OnInit, OnDestroy {
+export class StockComponent implements OnInit, OnDestroy {
   user_id:string;
   model;
   sumCostos = 0;
@@ -50,17 +50,15 @@ export class PedidoComponent implements OnInit, OnDestroy {
   public estado : any ;
   Productos : any;
   ProductosOriginal : any;
-  personaSeleccionada = {nombres :'',apellido_p:'',apellido_m:''}
-  personaVacia = {nombres :'',apellido_p:'',apellido_m:''};
-  productoSeleccionado  = {_id:'',Persona :{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
-  productoVacio = {_id:'',Persona:{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
+  productoSeleccionado  = {_id:'',PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
+  productoVacio = {_id:'',PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
   public date: Date = new Date();
   productoFormulario : FormGroup;
   productoCompletoFormulario : FormGroup;
   personaFormulario : FormGroup;
   PrecioVenta : any;
   FechaPago : any;
-  unidadesVendidas : number;
+  Cantidad : any;
 // los estados  =  1 = stock , 2 = pedido , 3 vendido , 4 pendiente pago
   Estados = [{valor:4,nombre:'Pendiente'},{valor:3,nombre:'Pagado'}];
 
@@ -157,12 +155,12 @@ export class PedidoComponent implements OnInit, OnDestroy {
     return false;
   }
   public refrescarData(){
-    let enPedido = 2;
+    let enStock = 1;
     let self = this;
     self.sumCostos = 0;
     self.sumVentas = 0;
     let usuario = JSON.parse(sessionStorage.getItem('usuario'));
-    this.productoService.listarPorEstado(enPedido,usuario._id).subscribe(productos=>{
+    this.productoService.listarPorEstado(enStock,usuario._id).subscribe(productos=>{
       console.log(productos);
       for(let i = 0 ; i < productos.length; i++){
           self.sumCostos += parseInt(productos[i].PrecioCosto);
@@ -176,7 +174,7 @@ export class PedidoComponent implements OnInit, OnDestroy {
     this.breadServ.setCurrent({
       description: 'de productos',
       display: true,
-      header: 'Pedidos',
+      header: 'Stock',
       levels: [
         {
           icon: 'dashboard',
@@ -194,8 +192,6 @@ export class PedidoComponent implements OnInit, OnDestroy {
   }
   public productoActual(producto){
     this.productoSeleccionado = producto;
-    console.log("en funcion productoactual",producto.Persona);
-    this.personaSeleccionada = producto.Persona[0];
     this.productoFormulario.controls['PrecioVenta'] = producto.PrecioVenta;
     this.productoFormulario.controls['Nombre'] = producto.Nombre;
     this.productoFormulario.controls['Codigo'] = producto.Codigo;
@@ -203,7 +199,6 @@ export class PedidoComponent implements OnInit, OnDestroy {
   public productoActualizar(producto){
 
     this.productoSeleccionado = producto;
-    this.personaSeleccionada = producto.Persona[0];
     this.productoCompletoFormulario.controls['Proveedor'] = producto.Proveedor;
     this.productoCompletoFormulario.controls['Nombre'] = producto.Nombre;
     this.productoCompletoFormulario.controls['Codigo'] = producto.Codigo;
@@ -212,7 +207,7 @@ export class PedidoComponent implements OnInit, OnDestroy {
     this.productoCompletoFormulario.controls['Cantidad'] = producto.Cantidad;
     this.productoCompletoFormulario.controls['FechaPago'] = producto.FechaPago;
     this.productoCompletoFormulario.controls['PrecioCosto'] = producto.PrecioCosto;
-    this.productoCompletoFormulario.controls['PrecioVenta'] = producto.PrecioVenta;
+    this.productoCompletoFormulario.controls['PrecioVenta'] = producto.PrecioVenta;    
   }
   public ver(producto){
     console.log(producto);
@@ -226,28 +221,59 @@ export class PedidoComponent implements OnInit, OnDestroy {
   }
 
   public addVenta(){
-    this.productoSeleccionado.FechaIngreso = this.convertirDate(this.productoSeleccionado.FechaIngreso);
-    let producto = this.productoSeleccionado;
-    let cantidad = producto.Cantidad - this.unidadesVendidas;
-    if(cantidad > 0 ){
-      producto.Estado = "2";
-      producto.Cantidad = cantidad;
-      this.productoService.actualizar(producto._id,producto,this.user_id).subscribe( p =>{
-        console.log("actualizado",p);
-        this.refrescarData();
+    let pSeleccionado = this.productoSeleccionado;
+    let pFormulario = this.productoFormulario.value;
+    // si el precio de venta no se modifica
+    if( !this.PrecioVenta ){
+      this.PrecioVenta = pSeleccionado.PrecioVenta
+    }
+    // si el estado es pagado a dia de hoy , insertar fecha de hoy
+    if(this.estado == 3 ){
+      this.FechaPago = "24/06/62";
+    }
+    let cantidad = pSeleccionado.Cantidad - parseInt(pFormulario.Cantidad);
+    if(cantidad>0){
+      let producto = {
+        'Nombre' : pSeleccionado.Nombre,
+        'Cantidad': cantidad ,
+        'Codigo': pSeleccionado.Codigo,
+        'Color': pSeleccionado.Color,
+        'Estado': 1,
+        'FechaIngreso': pSeleccionado.FechaIngreso,
+        'FechaPago': pFormulario.FechaPago || this.FechaPago,
+        'Persona': this.personaFormulario.value,
+        'PrecioCosto': pSeleccionado.PrecioCosto,
+        'PrecioVenta': this.PrecioVenta,
+        'Proveedor' : pSeleccionado.Proveedor,
+        'Talla': pSeleccionado.Talla
+      }
+      this.productoService.actualizar(pSeleccionado._id,producto,this.user_id).subscribe( producto =>{
+        console.log("actualizado",producto);
       })
     }else{
-      this.productoService.borrar(producto._id,this.user_id).subscribe( p =>{
-        console.log("ya no quedan",p);
-        this.refrescarData();
+      this.productoService.borrar(pSeleccionado._id,this.user_id).subscribe( producto =>{
+        console.log("ya no quedan",producto);
       })
     }
-    producto.Estado = "3";
-    producto.Cantidad = this.unidadesVendidas;
-    this.productoService.insertar(producto,this.user_id).subscribe ( p =>{
-      console.log("producto insertado en vendidos");
-      this.refrescarData();
-    })
+    let producto = {
+      'Nombre' : pSeleccionado.Nombre,
+      'Cantidad':  pFormulario.Cantidad ,
+      'Codigo': pSeleccionado.Codigo,
+      'Color': pSeleccionado.Color,
+      'Estado': this.estado,
+      'FechaIngreso': pSeleccionado.FechaIngreso,
+      'FechaPago': pFormulario.FechaPago || this.FechaPago,
+      'Persona': this.personaFormulario.value,
+      'PrecioCosto': pSeleccionado.PrecioCosto,
+      'PrecioVenta': this.PrecioVenta,
+      'Proveedor' : pSeleccionado.Proveedor,
+      'Talla': pSeleccionado.Talla
+    }
+    this.productoService.insertar(producto,this.user_id).subscribe(res=>{
+      console.log(res);
+    });
+    this.productoSeleccionado = this.productoVacio;
+    this.refrescarData();
 
   }
   public actualizarProducto(){
@@ -264,15 +290,13 @@ export class PedidoComponent implements OnInit, OnDestroy {
   public addProducto(){
     this.productoSeleccionado.FechaIngreso = this.convertirDate(this.productoSeleccionado.FechaIngreso);
     let producto = this.productoSeleccionado;
-    producto.Estado = "2";
-    producto.Persona = this.personaSeleccionada;
+    producto.Estado = "1";
     this.productoService.insertar(producto,this.user_id).subscribe( producto =>{
       console.log("se inserto",producto);
       this.refrescarData();
       this.productoSeleccionado = this.productoVacio;
-      this.personaSeleccionada = this.personaVacia;
     });
-    this.refrescarData();
+
   }
   public vaciarProductoActual(){
     this.productoSeleccionado = this.productoVacio;
@@ -284,7 +308,6 @@ export class PedidoComponent implements OnInit, OnDestroy {
       self.productoSeleccionado = self.productoVacio;
       self.refrescarData();
     });
-    self.refrescarData();
   }
   public ngOnDestroy() {
     this.breadServ.clear();

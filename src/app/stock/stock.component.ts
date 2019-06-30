@@ -3,7 +3,6 @@ import { BreadcrumbService , Message , MessagesService , UserService , User } fr
 import { Router } from '@angular/router';
 import { ProductoService } from '../_service/product.service';
 import { FormBuilder, FormGroup, Validators , ReactiveFormsModule } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
@@ -41,7 +40,7 @@ export class NgbdSortableHeader {
   providers: [ ProductoService  ]
 })
 export class StockComponent implements OnInit, OnDestroy {
-
+  user_id:string;
   model;
   sumCostos = 0;
   sumVentas = 0;
@@ -51,8 +50,8 @@ export class StockComponent implements OnInit, OnDestroy {
   public estado : any ;
   Productos : any;
   ProductosOriginal : any;
-  productoSeleccionado  = {_id:'',PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
-  productoVacio = {_id:'',PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
+  productoSeleccionado  = {_id:'',Persona:{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
+  productoVacio = {_id:'',Persona:{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
   public date: Date = new Date();
   productoFormulario : FormGroup;
   productoCompletoFormulario : FormGroup;
@@ -60,6 +59,7 @@ export class StockComponent implements OnInit, OnDestroy {
   PrecioVenta : any;
   FechaPago : any;
   Cantidad : any;
+  unidadesVendidas : number;
 // los estados  =  1 = stock , 2 = pedido , 3 vendido , 4 pendiente pago
   Estados = [{valor:4,nombre:'Pendiente'},{valor:3,nombre:'Pagado'}];
 
@@ -86,14 +86,14 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private modalService: NgbModal,
     private productoService : ProductoService,
     private msgServ: MessagesService,
     private router : Router,
     private formBuilder: FormBuilder,
     private breadServ: BreadcrumbService
   ) {
-
+    let usuario = JSON.parse(sessionStorage.getItem('usuario'));
+    this.user_id = usuario._id;
     this.refrescarData();
     this.personaFormulario = this.formBuilder.group({
       'nombres' : [null, Validators.required],
@@ -124,10 +124,7 @@ export class StockComponent implements OnInit, OnDestroy {
       'PrecioVenta' : [null, Validators.required]
     });
   }
-  openLg(content) {
-    console.log("content",content);
-    this.modalService.open(content );
-  }
+
   filtrar(){
     console.log("this filtro : ",this.filtro);
     this.Productos = this.ProductosOriginal.filter( producto => this.filtros(producto,this.filtro) );
@@ -163,8 +160,8 @@ export class StockComponent implements OnInit, OnDestroy {
     let self = this;
     self.sumCostos = 0;
     self.sumVentas = 0;
-
-    this.productoService.listarPorEstado(enStock).subscribe(productos=>{
+    let usuario = JSON.parse(sessionStorage.getItem('usuario'));
+    this.productoService.listarPorEstado(enStock,usuario._id).subscribe(productos=>{
       console.log(productos);
       for(let i = 0 ; i < productos.length; i++){
           self.sumCostos += parseInt(productos[i].PrecioCosto);
@@ -212,7 +209,6 @@ export class StockComponent implements OnInit, OnDestroy {
     this.productoCompletoFormulario.controls['FechaPago'] = producto.FechaPago;
     this.productoCompletoFormulario.controls['PrecioCosto'] = producto.PrecioCosto;
     this.productoCompletoFormulario.controls['PrecioVenta'] = producto.PrecioVenta;
-    this.productoCompletoFormulario = producto;
   }
   public ver(producto){
     console.log(producto);
@@ -226,66 +222,39 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   public addVenta(){
-    let pSeleccionado = this.productoSeleccionado;
-    let pFormulario = this.productoFormulario.value;
-    // si el precio de venta no se modifica
-    if( !this.PrecioVenta ){
-      this.PrecioVenta = pSeleccionado.PrecioVenta
-    }
-    // si el estado es pagado a dia de hoy , insertar fecha de hoy
-    if(this.estado == 3 ){
-      this.FechaPago = "24/06/62";
-    }
-    let cantidad = pSeleccionado.Cantidad - parseInt(pFormulario.Cantidad);
-    if(cantidad>0){
-      let producto = {
-        'Nombre' : pSeleccionado.Nombre,
-        'Cantidad': cantidad ,
-        'Codigo': pSeleccionado.Codigo,
-        'Color': pSeleccionado.Color,
-        'Estado': 1,
-        'FechaIngreso': pSeleccionado.FechaIngreso,
-        'FechaPago': pFormulario.FechaPago || this.FechaPago,
-        'Persona': this.personaFormulario.value,
-        'PrecioCosto': pSeleccionado.PrecioCosto,
-        'PrecioVenta': this.PrecioVenta,
-        'Proveedor' : pSeleccionado.Proveedor,
-        'Talla': pSeleccionado.Talla
-      }
-      this.productoService.actualizar(pSeleccionado._id,producto).subscribe( producto =>{
-        console.log("actualizado",producto);
+    this.productoSeleccionado.FechaIngreso = this.convertirDate(this.productoSeleccionado.FechaIngreso);
+    let producto = this.productoSeleccionado;
+    let cantidad = producto.Cantidad - this.unidadesVendidas;
+    if(cantidad > 0 ){
+      producto.Estado = "1";
+      producto.Cantidad = cantidad;
+      this.productoService.actualizar(producto._id,producto,this.user_id).subscribe( p =>{
+        console.log("actualizado",p);
+        this.refrescarData();
       })
     }else{
-      this.productoService.borrar(pSeleccionado._id).subscribe( producto =>{
-        console.log("ya no quedan",producto);
+      this.productoService.borrar(producto._id,this.user_id).subscribe( p =>{
+        console.log("ya no quedan",p);
+        this.refrescarData();
       })
     }
-    let producto = {
-      'Nombre' : pSeleccionado.Nombre,
-      'Cantidad':  pFormulario.Cantidad ,
-      'Codigo': pSeleccionado.Codigo,
-      'Color': pSeleccionado.Color,
-      'Estado': this.estado,
-      'FechaIngreso': pSeleccionado.FechaIngreso,
-      'FechaPago': pFormulario.FechaPago || this.FechaPago,
-      'Persona': this.personaFormulario.value,
-      'PrecioCosto': pSeleccionado.PrecioCosto,
-      'PrecioVenta': this.PrecioVenta,
-      'Proveedor' : pSeleccionado.Proveedor,
-      'Talla': pSeleccionado.Talla
-    }
-    this.productoService.insertar(producto).subscribe(res=>{
-      console.log(res);
-    });
-    this.productoSeleccionado = this.productoVacio;
-    this.refrescarData();
+    producto.Estado = "3";
+    producto.Cantidad = this.unidadesVendidas;
+    producto.Persona = this.personaFormulario.value;
+    this.productoService.insertar(producto,this.user_id).subscribe ( p =>{
+      console.log("producto vendido",producto);
+      console.log("producto retornado",p);
+      console.log("producto insertado en vendidos");
+
+      this.refrescarData();
+    })
 
   }
   public actualizarProducto(){
     console.log("prod selec",this.productoSeleccionado);
     let date = this.convertirDate(this.productoSeleccionado.FechaIngreso);
     this.productoSeleccionado.FechaIngreso = date;
-    this.productoService.actualizar(this.productoSeleccionado._id,this.productoSeleccionado).subscribe( producto =>{
+    this.productoService.actualizar(this.productoSeleccionado._id,this.productoSeleccionado,this.user_id).subscribe( producto =>{
       console.log("actualizado",producto);
     });
   }
@@ -296,7 +265,7 @@ export class StockComponent implements OnInit, OnDestroy {
     this.productoSeleccionado.FechaIngreso = this.convertirDate(this.productoSeleccionado.FechaIngreso);
     let producto = this.productoSeleccionado;
     producto.Estado = "1";
-    this.productoService.insertar(producto).subscribe( producto =>{
+    this.productoService.insertar(producto,this.user_id).subscribe( producto =>{
       console.log("se inserto",producto);
       this.refrescarData();
       this.productoSeleccionado = this.productoVacio;
@@ -308,7 +277,7 @@ export class StockComponent implements OnInit, OnDestroy {
   }
   public eliminar(){
     let self = this;
-    this.productoService.borrar(this.productoSeleccionado._id).subscribe( producto => {
+    this.productoService.borrar(this.productoSeleccionado._id,this.user_id).subscribe( producto => {
       console.log("se elimino ", producto);
       self.productoSeleccionado = self.productoVacio;
       self.refrescarData();
