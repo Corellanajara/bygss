@@ -167,7 +167,8 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="sel1">Cantidad:</label>
-                <select class="form-control " name="Cantidad" [(ngModel)]="unidadesVendidas" value={{productoSeleccionado.Cantidad}}>
+                <select class="form-control " name="Cantidad" [(ngModel)]="unidadesVendidas" value='0'>
+                  <option  value='0'>selecciona cantidad</option>
                    <option *ngFor="let numero of counter(productoSeleccionado.Cantidad)" [value]="numero">{{numero}}</option>
                 </select>
               </div>

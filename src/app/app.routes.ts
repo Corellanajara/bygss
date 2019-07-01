@@ -111,27 +111,6 @@ const routes: Routes = [
       }]
     }],
     path: '',
-  },
-  {
-    canActivate: [CanActivateGuard],
-    children: [
-      {
-        loadChildren: './agregar/agregar.module#AgregarModule',
-        path: 'agregar'
-      }
-    ],
-    component: LayoutAuthComponent,
-    data: [{
-      'skin': 'skin-black',
-      'display_tasks': false,
-      'header_components': [{
-        class: HeaderWidgetComponent,
-        data: {
-          label: 'agregar'
-        }
-      }]
-    }],
-    path: '',
   }
   /*,
   {
