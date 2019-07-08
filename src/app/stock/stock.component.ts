@@ -225,6 +225,18 @@ export class StockComponent implements OnInit, OnDestroy {
     this.productoSeleccionado.FechaIngreso = this.convertirDate(this.productoSeleccionado.FechaIngreso);
     let producto = this.productoSeleccionado;
     let cantidad = producto.Cantidad - this.unidadesVendidas;
+    producto.Cantidad = this.unidadesVendidas;
+    producto.Persona = this.personaFormulario.value;
+    this.productoService.insertar(producto,this.user_id).subscribe ( p =>{
+      console.log("producto vendido",producto);
+      console.log("producto retornado",p);
+      console.log("producto insertado en vendidos");
+
+      this.refrescarData();
+    })
+
+
+
     if(cantidad > 0 ){
       producto.Estado = "1";
       producto.Cantidad = cantidad;
@@ -238,17 +250,7 @@ export class StockComponent implements OnInit, OnDestroy {
         this.refrescarData();
       })
     }
-    producto.Estado = "3";
-    producto.Cantidad = this.unidadesVendidas;
-    producto.Persona = this.personaFormulario.value;
-    this.productoService.insertar(producto,this.user_id).subscribe ( p =>{
-      console.log("producto vendido",producto);
-      console.log("producto retornado",p);
-      console.log("producto insertado en vendidos");
-
-      this.refrescarData();
-    })
-
+    
   }
   public actualizarProducto(){
     console.log("prod selec",this.productoSeleccionado);
@@ -282,6 +284,10 @@ export class StockComponent implements OnInit, OnDestroy {
       self.productoSeleccionado = self.productoVacio;
       self.refrescarData();
     });
+  }
+  public logActual(){
+    console.log(this.productoSeleccionado);
+    console.log("unidades vendidas",this.unidadesVendidas);
   }
   public ngOnDestroy() {
     this.breadServ.clear();

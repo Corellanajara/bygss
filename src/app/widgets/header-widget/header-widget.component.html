@@ -1,3 +1,81 @@
 <button class="btn btn-primary btn-lg" >
-	<i class="fa fa-gear" (click)="clic()"></i>
+	<i class="fa fa-gear" (click)="estado=!estado"  ></i>
 </button>
+<style>
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 20%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 80%;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+.sidenav .plusbtn {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  font-size: 36px;
+  margin-left: 10px;
+}
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+.transparente {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+</style>
+
+<div id="mySidenav" class="sidenav" *ngIf="estado">
+	<a href="javascript:void(0)" class="plusbtn" (click)="add=!add">&#43;</a>
+  <a href="javascript:void(0)" class="closebtn" (click)="estado=!estado">&times;</a>
+  <ul>
+		<div  *ngIf="add">
+			<input type="text" name="" value="" [(ngModel)]="titulo" placeholder="Titulo" value="{{titulo}}">
+			<input type="text" name="" value="" placeholder="Contenido" [(ngModel)]="contenido" value="{{contenido}}">
+			<button type="button" name="button" (click)="addNota()">&#43;</button>
+		</div>
+  	<li *ngFor="let nota of notas" style="color:white">
+			<h2>{{nota.titulo}}<button class="transparente" (click)="eliminar(nota)">&times;</button>
+			</h2>
+			<p>{{nota.contenido}}</p>
+			<hr>
+		</li>
+
+  </ul>
+</div>

@@ -195,14 +195,11 @@
 
             <div class="col-md-4">
               <div class="form-group">
-                <label for="sel1" >Fecha Ingreso:</label>
-                <div class="col-md-9">
-                  <input class="form-control" placeholder="dd-mm-yyyy"
-                         name="dp" [(ngModel)]="productoSeleccionado.FechaIngreso" ngbDatepicker #c="ngbDatepicker">
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="c.toggle()" type="button"><i class="fa fa-calendar"></i> </button>
-                </div>
+                <label for="sel1" >Estado Venta:</label>
+                <select class="form-control " name="Estado" [(ngModel)]="productoSeleccionado.Estado" value='0'>
+                  <option  value='0'>selecciona estado</option>
+                   <option *ngFor="let estado of Estados" [value]="estado.valor">{{estado.nombre}}</option>
+                </select>
 
               </div>
             </div>
@@ -242,6 +239,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="logActual()">Log Actual</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!personaFormulario.valid" (click)="addVenta()">Vender</button>
       </div>
     </div>

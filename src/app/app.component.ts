@@ -50,11 +50,6 @@ export class AppComponent implements OnInit {
       'title': 'Vendido',
       'icon': 'book',
       'link': ['/vendido']
-    },
-    {
-      'title': 'Agregar',
-      'icon': 'book',
-      'link': ['/agregar']
     }/*,
     {
       'title': 'otro',
@@ -139,7 +134,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // define menu
+    
     this.menuServ.setCurrent(this.mylinks);
 
     this.footerServ.setCurrent(this.footer);
@@ -159,14 +154,14 @@ export class AppComponent implements OnInit {
         firstname: 'FIRSTNAME',
         lastname: 'LASTNAME'
     });
-    // sending a test message
+
     this.msgServ.addMessage( new Message( {
         author: user2,
         content: 'Mensaje ',
         destination: user1,
         title: 'Ojo hay algo que ver'
     }) );
-    // sending a test notif
+
     this.notifServ.addNotification( new Notification( {
         class: 'fa fa-users text-aqua',
         content: 'hay una notificacion',

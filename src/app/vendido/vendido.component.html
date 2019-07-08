@@ -82,10 +82,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="sel1" >Fecha Ingreso:</label>
-                <div class="col-md-9">
-                  <input type="form-control"
-                          [(ngModel)]="productoSeleccionado.FechaIngreso"  name="FechaIngreso" value={{productoSeleccionado.FechaIngreso}}>
-                </div>
+                <p> {{productoSeleccionado.createdAt.split("T")[0]  }} </p>
 
               </div>
             </div>
@@ -140,6 +137,7 @@
       <th scope="col" sortable="Cantidad" (sort)="onSort($event)">Cantidad</th>
       <th scope="col" sortable="PrecioVenta" (sort)="onSort($event)">Precio Venta</th>
       <th scope="col" sortable="Total" (sort)="onSort($event)">Total</th>
+      <th scope="col" sortable="Total" (sort)="onSort($event)">Estado</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -152,6 +150,8 @@
       <td>{{producto.Cantidad}}</td>
       <td>{{producto.PrecioVenta}}</td>
       <td>{{producto.PrecioVenta * producto.Cantidad}}</td>
+      <td *ngIf="producto.Estado==3">Vendido</td>
+      <td *ngIf="producto.Estado==4">Pendiente</td>
       <td>
         <button type="button" (click)="productoActualizar(producto)" class="btn btn-info" data-toggle="modal" data-target="#ModalVerproducto">
           ver

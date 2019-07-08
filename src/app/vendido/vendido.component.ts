@@ -57,7 +57,7 @@ export class VendidoComponent implements OnInit, OnDestroy {
   sumaVentas = 0;
   sumaTotales = 0;
   personaSeleccionada = {nombres :'',apellido_p:'',apellido_m:''}
-  productoSeleccionado  = {_id:'',Persona :{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
+  productoSeleccionado  = {createdAt:'',_id:'',Persona :{},PrecioCosto:0,Talla:'',Proveedor:'',FechaPago:'','FechaIngreso':'','Color':'','Nombre' : '','Codigo' : '',Cantidad : 0,'PrecioVenta' : '','Estado' : ''};
   ProductosOriginal : any;
   personaFormulario : FormGroup;
   user_id : string;
@@ -102,15 +102,17 @@ export class VendidoComponent implements OnInit, OnDestroy {
     let enPendientes = 4;
     let usuario = JSON.parse(sessionStorage.getItem('usuario'));
     this.user_id = usuario._id;
+    this.Productos = [];
+    this.ProductosOriginal = [];
     productoService.listarPorEstado(enVendido,this.user_id).subscribe(productos=>{
       console.log(productos);
       for(let i = 0 ; i < productos.length;i++){
+        this.Productos.push(productos[i]);
+        this.ProductosOriginal.push(productos[i]);
         this.sumaCostos += productos[i].PrecioCosto;
         this.sumaVentas += productos[i].PrecioVenta;
         this.sumaTotales += productos[i].Cantidad * productos[i].PrecioVenta;
       }
-      this.Productos = productos;
-      this.ProductosOriginal = productos;
     })
     productoService.listarPorEstado(enPendientes,this.user_id).subscribe(productos=>{
       console.log(productos);
@@ -120,7 +122,6 @@ export class VendidoComponent implements OnInit, OnDestroy {
         this.sumaCostos += productos[i].PrecioCosto;
         this.sumaVentas += productos[i].PrecioVenta;
         this.sumaTotales += productos[i].Cantidad * productos[i].PrecioVenta;
-        console.log(productos[i].Cantidad * productos[i].PrecioVenta);
       }
     })
 

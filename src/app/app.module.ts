@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 //services
 import { dbUserService } from './_service/user.service';
 import { ProductoService } from './_service/product.service';
+import { NotasService } from './_service/note.service';
+
 // modules
 import { NgxAdminLteModule } from 'ngx-admin-lte';
 
@@ -25,7 +27,7 @@ import { HeaderWidgetComponent } from './widgets/header-widget/header-widget.com
   declarations: [
     AppComponent,
     LoginComponent,
-    MenuWidgetComponent,
+    //MenuWidgetComponent,
     HeaderWidgetComponent,
     //EstudioJuridicoComponent
   ],
@@ -38,12 +40,12 @@ import { HeaderWidgetComponent } from './widgets/header-widget/header-widget.com
     NgxAdminLteModule,
     routing
   ],
-  providers: [dbUserService,ProductoService],
+  providers: [NotasService,dbUserService,ProductoService],
   bootstrap: [
     AppComponent
   ],
   entryComponents: [
-    MenuWidgetComponent,
+    //MenuWidgetComponent,
     HeaderWidgetComponent
   ]
 })
